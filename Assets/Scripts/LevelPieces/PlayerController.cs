@@ -20,7 +20,8 @@ namespace RunAndJump {
 		private bool _grounded = false;
 		private bool _jumping = false;
 		private bool _facingRight = true;
-		private bool _doubleJump = false;
+		private bool _doubleJump = true;
+        private bool _abilityDoubleJump = false;
 		private float _xVel;
 		private float _yVel;
 		private Collider2D _collider;
@@ -53,9 +54,9 @@ namespace RunAndJump {
                 Destroy(gameObject);
 			}
 		}
-        public void setDoubljump()
+        public void setDoubljump(bool enable)
         {
-            _doubleJump = true; ;
+            _abilityDoubleJump = enable;
         }
 
 		private void FixedUpdate () {
@@ -83,17 +84,18 @@ namespace RunAndJump {
 			// Process Vertical
 			if (_grounded) {
 				_yVel = PlatformVelocity ().y - 0.01f; // maintain velocity of platform, with slight downward pressure to keep the collision.
-				
+                _doubleJump = true;
 			}
 
 			if (_jumping && _grounded) {
 				_yVel = JumpSpeed;
 				AudioPlayer.Instance.PlaySfx (JumpFx);
 			}
-            else if (_jumping && _doubleJump) {
+            else if (_jumping && (_doubleJump && _abilityDoubleJump)) {
 				_yVel = JumpSpeed;				
 				AudioPlayer.Instance.PlaySfx (JumpFx);
-			}
+                _doubleJump = false;
+            }
 
 			_jumping = false;
 

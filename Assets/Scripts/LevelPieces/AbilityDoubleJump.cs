@@ -13,7 +13,7 @@ namespace RunAndJump {
             {
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
                 // Set big jump true
-                player.setDoubljump();
+                player.setDoubljump(true);
 
                 Destroy(gameObject);
             }
