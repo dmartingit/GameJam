@@ -20,7 +20,7 @@ namespace RunAndJump {
 		private bool _grounded = false;
 		private bool _jumping = false;
 		private bool _facingRight = true;
-		private bool _doubleJump = true;
+		private bool _doubleJump = false;
 		private float _xVel;
 		private float _yVel;
 		private Collider2D _collider;
@@ -44,6 +44,10 @@ namespace RunAndJump {
 				_playerDied = true;
 			}
 		}
+        public void setDoubljump()
+        {
+            _doubleJump = true; ;
+        }
 
 		private void FixedUpdate () {
 			_xVel = GetComponent<Rigidbody2D>().velocity.x;
@@ -70,16 +74,18 @@ namespace RunAndJump {
 			// Process Vertical
 			if (_grounded) {
 				_yVel = PlatformVelocity ().y - 0.01f; // maintain velocity of platform, with slight downward pressure to keep the collision.
-				_doubleJump = true;
+				
 			}
+
 			if (_jumping && _grounded) {
 				_yVel = JumpSpeed;
 				AudioPlayer.Instance.PlaySfx (JumpFx);
-			} else if (_jumping && _doubleJump) {
-				_yVel = JumpSpeed;
-				_doubleJump = false;
+			}
+            else if (_jumping && _doubleJump) {
+				_yVel = JumpSpeed;				
 				AudioPlayer.Instance.PlaySfx (JumpFx);
 			}
+
 			_jumping = false;
 
 			GetComponent<Rigidbody2D>().velocity = new Vector2 (_xVel, _yVel);		
