@@ -42,10 +42,10 @@ namespace RunAndJump {
 			Debug.Log("StartPlayerDeath called...");
 			if(!_playerDied){
 				_playerDied = true;
-                EnemyYellowFaceController[] list = FindObjectsOfType<EnemyYellowFaceController>();
-                foreach (var obj in list)
+                var list = FindObjectsOfType<EnemyYellowFaceController>();
+                foreach (var element in list)
                 {
-                    Destroy(obj.gameObject);
+                    Destroy(element.gameObject);
                 }
                 LevelHandlerUtils.DestroyLevel();
                 StartCoroutine(LevelHandlerUtils.LoadLevel("Level1"));
