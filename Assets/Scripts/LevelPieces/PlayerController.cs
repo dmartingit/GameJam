@@ -42,10 +42,6 @@ namespace RunAndJump {
 			Debug.Log("StartPlayerDeath called...");
 			if(!_playerDied){
 				_playerDied = true;
-				if(PlayerDeathEvent != null) {
-					PlayerDeathEvent();
-				}
-
 			}
 		}
 
