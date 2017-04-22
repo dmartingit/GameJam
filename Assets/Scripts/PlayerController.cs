@@ -5,11 +5,14 @@ using UnityEngine;
 namespace GameJam {
     public class PlayerController : MonoBehaviour {
 
-        public float m_maxSpeed = 0.02f;
+        public float m_maxSpeed = 6f;
+        public LayerMask m_grounds;
+        public Transform m_groundCheck;
 
         private float m_velX;
         private float m_velY;
         private bool m_flipDirection = false;
+        private bool m_canJump = false;
 
         private Animator m_animator;
 
@@ -25,7 +28,7 @@ namespace GameJam {
 
         public bool GetUp()
         {
-            return Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.W);
+            return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W);
         }
 
         private void Start()
@@ -33,10 +36,30 @@ namespace GameJam {
             m_animator = this.GetComponent<Animator>();
         }
 
-        private void Update()
+        private bool isGrounded()
+        {
+            if( Physics2D.OverlapCircle(m_groundCheck.position, 0.15f, m_grounds) != null)
+            {
+                return true;
+            }
+            return false;
+            
+        }
+
+        private void FixedUpdate()
         {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
+            
+            if (isGrounded())
+            {
+                m_canJump = true;
+            }
+            else
+            {
+                m_canJump = false;
+            }
+
             if (GetRigth())
             {
                 m_animator.SetInteger("Transition",1);
@@ -57,10 +80,14 @@ namespace GameJam {
                 }
                 //transform.Translate(-m_velX, 0, 0);
                 m_velX = -1 * m_maxSpeed;
+            } else if(GetUp() && m_canJump)
+            {
+                m_animator.SetInteger("Transition", 0);
+                m_velY = 1 * m_maxSpeed;
             } else
             {
                 m_animator.SetInteger("Transition", 0);
-                m_velX = 0;
+                m_velX = 0; 
             }
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
