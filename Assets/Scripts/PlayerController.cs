@@ -5,11 +5,13 @@ using UnityEngine;
 namespace GameJam {
     public class PlayerController : MonoBehaviour {
 
-        private float velocityX = 0.05f;
-        private float velocityY = 0.05f;
-        private bool flipDirection = false;
+        public float m_maxSpeed = 0.02f;
 
-        private Animator animator;
+        private float m_velX;
+        private float m_velY;
+        private bool m_flipDirection = false;
+
+        private Animator m_animator;
 
         public bool GetRigth()
         {
@@ -28,34 +30,40 @@ namespace GameJam {
 
         private void Start()
         {
-            animator = this.GetComponent<Animator>();
+            m_animator = this.GetComponent<Animator>();
         }
 
         private void Update()
         {
+            m_velX = GetComponent<Rigidbody2D>().velocity.x;
+            m_velY = GetComponent<Rigidbody2D>().velocity.y;
             if (GetRigth())
             {
-                animator.SetInteger("Transition",1);
-                if(flipDirection)
+                m_animator.SetInteger("Transition",1);
+                if(m_flipDirection)
                 {
                     GetComponent<SpriteRenderer>().flipX = false;
-                    flipDirection = !flipDirection;
+                    m_flipDirection = !m_flipDirection;
                 }
-                transform.Translate(velocityX, 0, 0);
+                //transform.Translate(velX, 0, 0);
+                m_velX = 1 * m_maxSpeed;
             } else if( GetLeft())
             {
-                animator.SetInteger("Transition", 1);
-                if (!flipDirection)
+                m_animator.SetInteger("Transition", 1);
+                if (!m_flipDirection)
                 {
                     GetComponent<SpriteRenderer>().flipX = true;
-                    flipDirection = !flipDirection;
+                    m_flipDirection = !m_flipDirection;
                 }
-                transform.Translate(-velocityX, 0, 0);
-            }
-            else
+                //transform.Translate(-m_velX, 0, 0);
+                m_velX = -1 * m_maxSpeed;
+            } else
             {
-                animator.SetInteger("Transition", 0);
+                m_animator.SetInteger("Transition", 0);
+                m_velX = 0;
             }
+
+            GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
         }
     }
 }
