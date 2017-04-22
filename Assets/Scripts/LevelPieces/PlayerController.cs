@@ -42,10 +42,8 @@ namespace RunAndJump {
 			Debug.Log("StartPlayerDeath called...");
 			if(!_playerDied){
 				_playerDied = true;
-				if(PlayerDeathEvent != null) {
-					PlayerDeathEvent();
-				}
-
+                LevelHandlerUtils.DestroyLevel();
+                StartCoroutine(LevelHandlerUtils.LoadLevel("Tutorial_level"));
 			}
 		}
 

@@ -5,9 +5,6 @@ public class InputWrapper : MonoBehaviour {
 
 	// A custom class to capture keyboard and virtual input
 
-	private bool _virtualLeft = false;
-	private bool _virtualRight = false;
-	private bool _virtualUp = false; 
 	private bool _enabled = true;
 	private static InputWrapper _instance;
 
@@ -27,43 +24,18 @@ public class InputWrapper : MonoBehaviour {
 
 	public void EnableInput(bool enabled) {
 		_enabled = enabled;
-		Reset ();
-	}
-
-	public void Reset() {
-		_virtualLeft = false;
-		_virtualRight = false;
-		_virtualUp = false; 
-	}
-
-	public bool VirtualLeft {
-		get { return _virtualLeft; }
-		set { _virtualLeft = value; }
-	}
-	
-	public bool VirtualRight {
-		get { return _virtualRight; }
-		set { _virtualRight = value; }
-	}
-	
-	public bool VirtualUp {
-		get { return _virtualUp; }
-		set { _virtualUp = value; }
 	}
 
 	public bool GetRigth() {
-		return _enabled && (Input.GetKey (KeyCode.RightArrow) || _virtualRight);
+		return _enabled && (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D));
 	}
 
 	public bool GetLeft() {
-		return _enabled && (Input.GetKey (KeyCode.LeftArrow) || _virtualLeft);
+		return _enabled && (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A));
 	}
 
 	public bool GetUp() {
-		bool result = _enabled && ((Input.GetKeyDown (KeyCode.Space) || _virtualUp));
-		_virtualUp = false; // This force to release the button
-		return result;
+		return _enabled && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W));
 	}
-
-
+    
 }
