@@ -12,7 +12,7 @@ namespace RunAndJump {
 				PlayerController player = coll.gameObject.GetComponent<PlayerController>();
 				AudioPlayer.Instance.PlaySfx (PlayerLoseFx);
 				player.StartPlayerDeath();
-			}
+            }
 		}
 	}
 }
