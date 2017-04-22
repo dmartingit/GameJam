@@ -42,6 +42,15 @@ namespace RunAndJump {
 			Debug.Log("StartPlayerDeath called...");
 			if(!_playerDied){
 				_playerDied = true;
+                var list = FindObjectsOfType<EnemyYellowFaceController>();
+                foreach(var enemy in list)
+                {
+                    Destroy(enemy.gameObject);
+                }
+
+                LevelHandlerUtils.DestroyLevel();
+                StartCoroutine(LevelHandlerUtils.LoadLevel("Level1"));
+                Destroy(gameObject);
 			}
 		}
         public void setDoubljump()
