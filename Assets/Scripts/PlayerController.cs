@@ -56,7 +56,7 @@ namespace GameJam {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
 
-            if (!m_canJump && (m_velY > 0) && (!(GetLeft() || GetRigth())))
+            if (!m_canJump && (m_velY > 0))
             {
                 m_animator.SetInteger("Transition", 2);
             }
