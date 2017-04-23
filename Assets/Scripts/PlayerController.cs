@@ -38,7 +38,7 @@ namespace GameJam {
 
         private bool isGrounded()
         {
-            if( Physics2D.OverlapCircle(m_groundCheck.position, 0.15f, m_grounds) != null)
+            if(Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.15f, m_grounds) != null)
             {
                 return true;
             }
