@@ -11,12 +11,15 @@ namespace GameJam
             if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 var player = col.gameObject.GetComponent<PlayerController>();
-                if(player.m_state != PlayerController.state.water)
+                if(player.m_state == PlayerController.state.fire)
                 {
-                    GetComponent<BoxCollider2D>().enabled = true;
-                } else
+                    player.die();
+                } else if(player.m_state == PlayerController.state.water)
                 {
                     GetComponent<BoxCollider2D>().enabled = false;
+                } else
+                {
+                    GetComponent<BoxCollider2D>().enabled = true;
                 }
             }
         }

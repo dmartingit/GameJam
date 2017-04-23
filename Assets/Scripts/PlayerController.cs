@@ -22,7 +22,6 @@ namespace GameJam {
         private bool m_flipDirection = false;
         private bool m_canJump = false;
         private bool m_canDoubleJump = false;
-        private bool m_doubleJump = false;
 
         private Animator m_animator;
 
@@ -38,6 +37,12 @@ namespace GameJam {
 
         public bool GetUp()
         {
+            return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W);
+        }
+
+
+        public bool GetUpKeyPress()
+        {
             return Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
         }
 
@@ -46,22 +51,21 @@ namespace GameJam {
             return Input.GetKey(KeyCode.S);
         }
 
-
-        public void SetDoubleJump(bool setter)
-        {
-            m_doubleJump = setter;
-            Debug.Log("m_doubleJump: " + m_doubleJump);
-        }
-
         private void Start()
         {
             m_animator = this.GetComponent<Animator>();
             GetComponent<Rigidbody2D>().freezeRotation = true;
         }
 
+        public void die()
+        {
+            transform.position = GameObject.Find("Spawn").transform.position;
+            m_state = state.none;
+        }
+
         private bool isGrounded()
         {
-            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.05f, m_grounds);
+            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.15f, m_grounds);
         }
 
         private void FixedUpdate()
@@ -111,24 +115,24 @@ namespace GameJam {
                 m_velX = 0;
             }
 
+            if (GetUp() && (m_canDoubleJump && (m_state == state.air)))
+            {
+                m_animator.SetInteger("Transition", 2);
+                m_velY = 1 * m_maxSpeedY;
+                m_canDoubleJump = false;
+            }
+
             if (GetUp() && m_canJump && !m_isClimbing)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = true;
             }
-
-            if (GetUp() && (m_canDoubleJump && m_doubleJump))
-            {
-                m_animator.SetInteger("Transition", 2);
-                m_velY = 1 * m_maxSpeedY;
-                m_canDoubleJump = false;
-            }
             
             if (m_isClimbing)
             {
                 GetComponent<Rigidbody2D>().gravityScale = 0;
-                if(GetUp())
+                if(GetUpKeyPress())
                 {
                     transform.Translate(0, 0.02f, 0);
                 } else if(GetDown())

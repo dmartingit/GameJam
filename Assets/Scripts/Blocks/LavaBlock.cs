@@ -13,7 +13,7 @@ namespace GameJam
                 var player = col.gameObject.GetComponent<PlayerController>();
                 if (player.m_state != PlayerController.state.fire)
                 {
-                    player.transform.position = GameObject.Find("Spawn").transform.position;
+                    player.die();
                 }
             }
         }
