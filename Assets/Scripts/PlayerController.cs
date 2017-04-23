@@ -54,20 +54,17 @@ namespace GameJam {
         {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
-            
-if (GetUp() && (m_canDoubleJump && m_doubleJump))
-            {
-                m_animator.SetInteger("Transition", 0);
-                m_velY = 1 * m_maxSpeed;
-                m_canDoubleJump = false;
-            } if (!m_canJump && (m_velY > 0))
+
+            if (!m_canJump && (m_velY > 0))
             {
                 m_animator.SetInteger("Transition", 2);
             }
             else if (!m_canJump && (m_velY < 0))
             {
                 m_animator.SetInteger("Transition", 3);
-            }             if (isGrounded())
+            }
+
+            if (isGrounded())
             {
                 m_canJump = true;
             }
@@ -109,7 +106,14 @@ if (GetUp() && (m_canDoubleJump && m_doubleJump))
                 m_velY = 1 * m_maxSpeed;
                 m_canDoubleJump = true;
             }
-            
+
+            if (GetUp() && (m_canDoubleJump && m_doubleJump))
+            {
+                m_animator.SetInteger("Transition", 0);
+                m_velY = 1 * m_maxSpeed;
+                m_canDoubleJump = false;
+            }
+
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
         }
     }
