@@ -40,7 +40,6 @@ namespace GameJam {
         private bool isGrounded()
         {
             return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.25f, m_grounds);
-            
         }
 
         private void FixedUpdate()
