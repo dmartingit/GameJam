@@ -10,6 +10,12 @@ namespace GameJam {
         public LayerMask m_grounds;
         public Transform m_groundCheck;
 
+        public enum state {
+            none, air, water, fire, earth
+        };
+
+        public state m_state = state.none;
+
         private float m_velX;
         private float m_velY;
         private bool m_flipDirection = false;
@@ -48,7 +54,7 @@ namespace GameJam {
 
         private bool isGrounded()
         {
-            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.25f, m_grounds);
+            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.05f, m_grounds);
         }
 
         private void FixedUpdate()
