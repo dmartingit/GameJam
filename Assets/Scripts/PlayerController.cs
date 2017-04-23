@@ -5,9 +5,16 @@ using UnityEngine;
 namespace GameJam {
     public class PlayerController : MonoBehaviour {
 
-        public float m_maxSpeed = 6f;
+        public float m_maxSpeedX = 3f;
+        public float m_maxSpeedY = 5f;
         public LayerMask m_grounds;
         public Transform m_groundCheck;
+
+        public enum state {
+            none, air, water, fire, earth
+        };
+
+        public state m_state = state.none;
 
         private float m_velX;
         private float m_velY;
@@ -47,7 +54,7 @@ namespace GameJam {
 
         private bool isGrounded()
         {
-            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.25f, m_grounds);
+            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.05f, m_grounds);
         }
 
         private void FixedUpdate()
@@ -58,10 +65,6 @@ namespace GameJam {
             if (!m_canJump && (m_velY > 0))
             {
                 m_animator.SetInteger("Transition", 2);
-            }
-            else if (!m_canJump && (m_velY < 0))
-            {
-                m_animator.SetInteger("Transition", 3);
             }
 
             if (isGrounded())
@@ -82,7 +85,7 @@ namespace GameJam {
                     m_flipDirection = !m_flipDirection;
                 }
                 //transform.Translate(velX, 0, 0);
-                m_velX = 1 * m_maxSpeed;
+                m_velX = 1 * m_maxSpeedX;
             } else if( GetLeft())
             {
                 m_animator.SetInteger("Transition", 1);
@@ -92,7 +95,7 @@ namespace GameJam {
                     m_flipDirection = !m_flipDirection;
                 }
                 //transform.Translate(-m_velX, 0, 0);
-                m_velX = -1 * m_maxSpeed;
+                m_velX = -1 * m_maxSpeedX;
             }
             else if(m_canJump)
             {
@@ -103,14 +106,14 @@ namespace GameJam {
             if (GetUp() && m_canJump)
             {
                 m_animator.SetInteger("Transition", 0);
-                m_velY = 1 * m_maxSpeed;
+                m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = true;
             }
 
             if (GetUp() && (m_canDoubleJump && m_doubleJump))
             {
-                m_animator.SetInteger("Transition", 0);
-                m_velY = 1 * m_maxSpeed;
+                m_animator.SetInteger("Transition", 2);
+                m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = false;
             }
 
