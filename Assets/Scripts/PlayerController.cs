@@ -15,13 +15,13 @@ namespace GameJam {
         };
 
         public state m_state = state.none;
+        public bool m_isClimbing = false;
 
         private float m_velX;
         private float m_velY;
         private bool m_flipDirection = false;
         private bool m_canJump = false;
         private bool m_canDoubleJump = false;
-        private bool m_doubleJump = false;
 
         private Animator m_animator;
 
@@ -40,10 +40,15 @@ namespace GameJam {
             return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W);
         }
 
-        public void SetDoubleJump(bool setter)
+
+        public bool GetUpKeyPress()
         {
-            m_doubleJump = setter;
-            Debug.Log("m_doubleJump: " + m_doubleJump);
+            return Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
+        }
+
+        public bool GetDown()
+        {
+            return Input.GetKey(KeyCode.S);
         }
 
         private void Start()
@@ -52,15 +57,22 @@ namespace GameJam {
             GetComponent<Rigidbody2D>().freezeRotation = true;
         }
 
+        public void die()
+        {
+            transform.position = GameObject.Find("Spawn").transform.position;
+            m_state = state.none;
+        }
+
         private bool isGrounded()
         {
-            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.05f, m_grounds);
+            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.15f, m_grounds);
         }
 
         private void FixedUpdate()
         {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
+            GetComponent<Rigidbody2D>().gravityScale = 1;
 
             if (!m_canJump && (m_velY > 0))
             {
@@ -103,18 +115,30 @@ namespace GameJam {
                 m_velX = 0;
             }
 
-            if (GetUp() && m_canJump)
+            if (GetUp() && (m_canDoubleJump && (m_state == state.air)))
+            {
+                m_animator.SetInteger("Transition", 2);
+                m_velY = 1 * m_maxSpeedY;
+                m_canDoubleJump = false;
+            }
+
+            if (GetUp() && m_canJump && !m_isClimbing)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = true;
             }
-
-            if (GetUp() && (m_canDoubleJump && m_doubleJump))
+            
+            if (m_isClimbing)
             {
-                m_animator.SetInteger("Transition", 2);
-                m_velY = 1 * m_maxSpeedY;
-                m_canDoubleJump = false;
+                GetComponent<Rigidbody2D>().gravityScale = 0;
+                if(GetUpKeyPress())
+                {
+                    transform.Translate(0, 0.02f, 0);
+                } else if(GetDown())
+                {
+                    transform.Translate(0, -0.02f, 0);
+                }
             }
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
