@@ -34,6 +34,7 @@ namespace GameJam {
         private void Start()
         {
             m_animator = this.GetComponent<Animator>();
+            GetComponent<Rigidbody2D>().freezeRotation = true;
         }
 
         private bool isGrounded()
@@ -80,14 +81,17 @@ namespace GameJam {
                 }
                 //transform.Translate(-m_velX, 0, 0);
                 m_velX = -1 * m_maxSpeed;
-            } else if(GetUp() && m_canJump)
+            }
+            else
+            {
+                m_animator.SetInteger("Transition", 0);
+                m_velX = 0;
+            }
+
+            if (GetUp() && m_canJump)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeed;
-            } else
-            {
-                m_animator.SetInteger("Transition", 0);
-                m_velX = 0; 
             }
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
