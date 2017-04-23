@@ -7,14 +7,10 @@ namespace GameJam
 {
     public class NextLevel : MonoBehaviour
     {
-        void Start()
-        {
-            Button b = gameObject.GetComponent<Button>();
-            b.onClick.AddListener(delegate () { this.ButtonClicked(); });
-        }
 
         public void ButtonClicked()
         {
+            Debug.Log("Clicked");
             Application.LoadLevel("Levels/Level2");
         }
     }
