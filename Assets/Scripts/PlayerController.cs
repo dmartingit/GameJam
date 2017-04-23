@@ -48,7 +48,6 @@ namespace GameJam {
         private bool isGrounded()
         {
             return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.25f, m_grounds);
-            
         }
 
         private void FixedUpdate()
@@ -56,14 +55,19 @@ namespace GameJam {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
             
-            if (GetUp() && (m_canDoubleJump && m_doubleJump))
+if (GetUp() && (m_canDoubleJump && m_doubleJump))
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeed;
                 m_canDoubleJump = false;
+            } if (!m_canJump && (m_velY > 0))
+            {
+                m_animator.SetInteger("Transition", 2);
             }
-
-            if (isGrounded())
+            else if (!m_canJump && (m_velY < 0))
+            {
+                m_animator.SetInteger("Transition", 3);
+            }             if (isGrounded())
             {
                 m_canJump = true;
             }
@@ -93,7 +97,7 @@ namespace GameJam {
                 //transform.Translate(-m_velX, 0, 0);
                 m_velX = -1 * m_maxSpeed;
             }
-            else
+            else if(m_canJump)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velX = 0;
