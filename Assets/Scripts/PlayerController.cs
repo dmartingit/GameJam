@@ -63,7 +63,13 @@ namespace GameJam {
 
         private bool isGrounded()
         {
-            return Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.15f, m_grounds);
+            return Physics2D.Linecast(transform.position, m_groundCheck.position, m_grounds);
+            var col = Physics2D.OverlapCircle(m_groundCheck.transform.position, 0.15f, m_grounds);
+            if(col != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void FixedUpdate()
@@ -88,7 +94,7 @@ namespace GameJam {
 
             if (GetUp() && (m_canDoubleJump && (m_state == state.air)))
             {
-                m_animator.SetInteger("Transition", 2);
+                m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = false;
             }
