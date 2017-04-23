@@ -41,6 +41,12 @@ namespace GameJam {
             return Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
         }
 
+        public bool GetDown()
+        {
+            return Input.GetKey(KeyCode.S);
+        }
+
+
         public void SetDoubleJump(bool setter)
         {
             m_doubleJump = setter;
@@ -125,6 +131,9 @@ namespace GameJam {
                 if(GetUp())
                 {
                     transform.Translate(0, 0.02f, 0);
+                } else if(GetDown())
+                {
+                    transform.Translate(0, -0.02f, 0);
                 }
             }
 
