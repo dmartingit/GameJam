@@ -15,7 +15,6 @@ namespace GameJam {
         };
 
         public state m_state = state.none;
-        public bool m_isClimbing = false;
 
         private float m_velX;
         private float m_velY;
@@ -87,6 +86,20 @@ namespace GameJam {
                 m_canJump = false;
             }
 
+            if (GetUp() && (m_canDoubleJump && (m_state == state.air)))
+            {
+                m_animator.SetInteger("Transition", 2);
+                m_velY = 1 * m_maxSpeedY;
+                m_canDoubleJump = false;
+            }
+
+            if (GetUp() && m_canJump)
+            {
+                m_animator.SetInteger("Transition", 0);
+                m_velY = 1 * m_maxSpeedY;
+                m_canDoubleJump = true;
+            }
+
             if (GetRigth())
             {
                 m_animator.SetInteger("Transition",1);
@@ -97,7 +110,7 @@ namespace GameJam {
                 }
                 //transform.Translate(velX, 0, 0);
                 m_velX = 1 * m_maxSpeedX;
-            } else if( GetLeft())
+            } else if(GetLeft())
             {
                 m_animator.SetInteger("Transition", 1);
                 if (!m_flipDirection)
@@ -107,37 +120,10 @@ namespace GameJam {
                 }
                 //transform.Translate(-m_velX, 0, 0);
                 m_velX = -1 * m_maxSpeedX;
-            }
-            else if(m_canJump)
+            }else if (m_canJump)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velX = 0;
-            }
-
-            if (GetUp() && (m_canDoubleJump && (m_state == state.air)))
-            {
-                m_animator.SetInteger("Transition", 2);
-                m_velY = 1 * m_maxSpeedY;
-                m_canDoubleJump = false;
-            }
-
-            if (GetUp() && m_canJump && !m_isClimbing)
-            {
-                m_animator.SetInteger("Transition", 0);
-                m_velY = 1 * m_maxSpeedY;
-                m_canDoubleJump = true;
-            }
-            
-            if (m_isClimbing)
-            {
-                GetComponent<Rigidbody2D>().gravityScale = 0;
-                if(GetUpKeyPress())
-                {
-                    transform.Translate(0, 0.02f, 0);
-                } else if(GetDown())
-                {
-                    transform.Translate(0, -0.02f, 0);
-                }
             }
 
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
