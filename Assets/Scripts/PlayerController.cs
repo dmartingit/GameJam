@@ -59,9 +59,7 @@ namespace GameJam {
 
         public void die()
         {
-            transform.position = GameObject.Find("Spawn").transform.position;
-            m_state = state.none;
-            GetComponent<SpriteRenderer>().color = Color.white;
+            Application.LoadLevel(Application.loadedLevel);
         }
 
         private bool isGrounded()
