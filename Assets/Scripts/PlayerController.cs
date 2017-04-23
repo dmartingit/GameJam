@@ -47,6 +47,15 @@ namespace GameJam {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
             
+            if (!m_canJump && (m_velY > 0))
+            {
+                m_animator.SetInteger("Transition", 2);
+            }
+            else if (!m_canJump && (m_velY < 0))
+            {
+                m_animator.SetInteger("Transition", 3);
+            }
+
             if (isGrounded())
             {
                 m_canJump = true;
@@ -77,7 +86,7 @@ namespace GameJam {
                 //transform.Translate(-m_velX, 0, 0);
                 m_velX = -1 * m_maxSpeed;
             }
-            else
+            else if(m_canJump)
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velX = 0;
