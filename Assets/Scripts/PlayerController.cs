@@ -13,6 +13,8 @@ namespace GameJam {
         private float m_velY;
         private bool m_flipDirection = false;
         private bool m_canJump = false;
+        private bool m_canDoubleJump = false;
+        private bool m_doubleJump = false;
 
         private Animator m_animator;
 
@@ -29,6 +31,12 @@ namespace GameJam {
         public bool GetUp()
         {
             return Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W);
+        }
+
+        public void SetDoubleJump(bool setter)
+        {
+            m_doubleJump = setter;
+            Debug.Log("m_doubleJump: " + m_doubleJump);
         }
 
         private void Start()
@@ -48,6 +56,13 @@ namespace GameJam {
             m_velX = GetComponent<Rigidbody2D>().velocity.x;
             m_velY = GetComponent<Rigidbody2D>().velocity.y;
             
+            if (GetUp() && (m_canDoubleJump && m_doubleJump))
+            {
+                m_animator.SetInteger("Transition", 0);
+                m_velY = 1 * m_maxSpeed;
+                m_canDoubleJump = false;
+            }
+
             if (isGrounded())
             {
                 m_canJump = true;
@@ -88,8 +103,9 @@ namespace GameJam {
             {
                 m_animator.SetInteger("Transition", 0);
                 m_velY = 1 * m_maxSpeed;
+                m_canDoubleJump = true;
             }
-
+            
             GetComponent<Rigidbody2D>().velocity = new Vector2(m_velX, m_velY);
         }
     }
