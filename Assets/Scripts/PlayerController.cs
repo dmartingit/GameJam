@@ -60,10 +60,6 @@ namespace GameJam {
             {
                 m_animator.SetInteger("Transition", 2);
             }
-            else if (!m_canJump && (m_velY < 0))
-            {
-                m_animator.SetInteger("Transition", 3);
-            }
 
             if (isGrounded())
             {
@@ -110,7 +106,7 @@ namespace GameJam {
 
             if (GetUp() && (m_canDoubleJump && m_doubleJump))
             {
-                m_animator.SetInteger("Transition", 0);
+                m_animator.SetInteger("Transition", 2);
                 m_velY = 1 * m_maxSpeedY;
                 m_canDoubleJump = false;
             }
