@@ -61,6 +61,7 @@ namespace GameJam {
         {
             transform.position = GameObject.Find("Spawn").transform.position;
             m_state = state.none;
+            GetComponent<SpriteRenderer>().color = Color.white;
         }
 
         private bool isGrounded()

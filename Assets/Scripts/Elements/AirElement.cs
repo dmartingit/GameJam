@@ -12,6 +12,7 @@ namespace GameJam
             {
                 var player = col.gameObject.GetComponent<PlayerController>();
                 player.m_state = PlayerController.state.air;
+                player.GetComponent<SpriteRenderer>().color = Color.grey;
                 Destroy(gameObject);
             }
         }
